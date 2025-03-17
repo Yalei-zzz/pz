@@ -18,7 +18,6 @@ while True:
             sys.exit()  # 退出程序
         elif event.type == pygame.MOUSEBUTTONDOWN:
             game.mouseClickHandler(event.button)
-
     game.update()
     game.draw()
 
