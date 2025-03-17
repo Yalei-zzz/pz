@@ -31,6 +31,9 @@ class ObjectBase(image.Image):
     
     def getSummonCD(self):  # 从表中获取多久召唤一次召唤物
         return self.getID()['SUMMON_CD']
+    
+    def canLoot(self):  # 只需拿到使用这个方法，就可以知道这个object是否可以捡起
+        return self.getID()['CAN_LOOT']
 
     def checkImageIndex(self):   # 判断延时，时间一到就返回True，可以切换图片
 

@@ -9,6 +9,7 @@ data = {
         'SUMMON_CD' : -1,  
         'SIZE' : (39, 39),  # 子弹的大小
         'SPEED' : (3, 0),  # 子弹的速度
+        'CAN_LOOT' : False,  # 是否可拾取
     },
     # 僵尸一号属性表
     1 :{
@@ -19,6 +20,7 @@ data = {
         'SUMMON_CD' : -1,
         'SIZE' : (100, 128),
         'SPEED' : (-0.6, 0),
+        'CAN_LOOT' : False,  # 是否可拾取
     },
     # 阳光属性表
     2 :{
@@ -29,6 +31,7 @@ data = {
         'SUMMON_CD' : -1,
         'SIZE' : (80, 80),
         'SPEED' : (0, 2),
+        'CAN_LOOT' : True,  # 是否可拾取
     },
     # 向日葵属性表
     3 :{
@@ -39,6 +42,7 @@ data = {
         'SUMMON_CD' : 5,  # 定义多久召唤一次阳光，如果没有召唤物，则为-1
         'SIZE' : (128, 128),
         'SPEED' : (0, 0),
+        'CAN_LOOT' : False,  # 是否可拾取
     },
 
 }
