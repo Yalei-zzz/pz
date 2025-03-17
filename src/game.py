@@ -2,6 +2,10 @@ import pygame
 import image
 from const import *
 import sunflower
+import peashooter
+import zombiebase
+import time
+import random
 import data_object
 
 
@@ -10,8 +14,10 @@ class Game(object):
         self.ds = ds
         self.back = image.Image(PATH_BACK, 0, (0, 0), GAME_SIZE, 0)
         self.plants = []
+        self.zombies = []
         self.summons = []
         self.hasPlant = []
+        self.zombieGenertateTime = 0
         self.gold = 300
         self.goldFont = pygame.font.Font(None, 60)  # None表示默认字体
         for i in range(GRID_SIZE[0]):
@@ -32,6 +38,8 @@ class Game(object):
             plant.draw(self.ds)
         for summon in self.summons:
             summon.draw(self.ds)
+        for zombie in self.zombies:
+            zombie.draw(self.ds)
 
         self.renderFont()
 
@@ -44,6 +52,12 @@ class Game(object):
                 self.summons.append(summ)
         for summon in self.summons:
             summon.update()
+        for zombie in self.zombies:
+            zombie.update()
+
+        if time.time() - self.zombieGenertateTime > ZOMBIEBORN_CD:
+            self.zombieGenertateTime = time.time()
+            self.addZomie(14, random.randint(0, GRID_COUNT[1]-1))
 
     def getIndexByPos(self, pos):  # 根据位置获取当前所处的方格位置，并返回
         x = (pos[0]-LEFT_TOP[0]) // GRID_SIZE[0]  
@@ -54,6 +68,15 @@ class Game(object):
         self.hasPlant[x][y]=1
         pos = LEFT_TOP[0] + x*GRID_SIZE[0], LEFT_TOP[1] + y*GRID_SIZE[1]
         self.plants.append(sunflower.SunFlower(SUNFLOWER_ID, pos))
+
+    def addPeaShooter(self, x, y):  # 种下豌豆射手
+        self.hasPlant[x][y]=1
+        pos = LEFT_TOP[0] + x*GRID_SIZE[0], LEFT_TOP[1] + y*GRID_SIZE[1]
+        self.plants.append(peashooter.PeaShooter(PEASHOOTER_ID, pos))
+
+    def addZomie(self, x, y):
+        pos = LEFT_TOP[0] + x*GRID_SIZE[0], LEFT_TOP[1] + y*GRID_SIZE[1]
+        self.zombies.append(zombiebase.ZombieBase(ZOMBIE_ID, pos))
         
 
     # 是否捡起一个object，如果捡起了，就返回True，在此次鼠标事件之后不在执行其他的操作
@@ -85,6 +108,8 @@ class Game(object):
         self.gold -= data_object.data[objID]['PRICE']
         if objID ==SUNFLOWER_ID:  # 如果ID为向日葵的
             self.addSunFlower(x, y)  # 通过getIndexByPos()函数获取方格位置并种下
+        elif objID == PEASHOOTER_ID:
+            self.addPeaShooter(x ,y)
             
 
     def mouseClickHandler(self, btn):  #  鼠标事件检测
@@ -93,3 +118,5 @@ class Game(object):
             return
         if btn==1:  # 如果btn=1，说明左键按下，种下植物
             self.checkAddPlant(mousepos, SUNFLOWER_ID)  # 传入位置和要种的植物ID
+        elif btn==3:
+            self.checkAddPlant(mousepos, PEASHOOTER_ID)

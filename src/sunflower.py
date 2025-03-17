@@ -16,7 +16,3 @@ class SunFlower(objectbase.ObjectBase):
         if self.hasSummon():
             self.hasSunLight = False
             return sunlight.SunLight(2, (self.pos[0]+20, self.pos[1]-10))
-            
-
-
-            

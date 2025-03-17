@@ -4,4 +4,8 @@ GRID_SIZE = (76, 96)
 GRID_COUNT = (9, 5)
 PATH_BACK = "pz/pic/other/back.png"
 
+ZOMBIE_ID = 1
 SUNFLOWER_ID = 3
+PEASHOOTER_ID = 4
+
+ZOMBIEBORN_CD = 20

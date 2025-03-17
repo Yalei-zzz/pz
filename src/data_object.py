@@ -6,7 +6,7 @@ data = {
         'IMAGE_INDEX_MAX' : 0, # 子弹自动画图片数量
         'IMAGE_INDEX_CD' : 0.3,  # 子弹图片切换的时间
         'POSITION_CD' : 0.005, # 子弹位置切换的时间间隔
-        'SUMMON_CD' : -1,  # 定义多久召唤一次阳光，如果没有召唤物，则为-1
+        'SUMMON_CD' : -1,  # 没有召唤物，则为-1
         'SIZE' : (39, 39),  # 子弹的大小
         'SPEED' : (3, 0),  # 子弹的速度
         'CAN_LOOT' : False,  # 是否可拾取
@@ -17,7 +17,7 @@ data = {
         "PATH" : "pz/pic/zombie/0/%d.png",
         'IMAGE_INDEX_MAX' : 15,
         'IMAGE_INDEX_CD' : 0.3,
-        'POSITION_CD' : 0.05,
+        'POSITION_CD' : 0.08,
         'SUMMON_CD' : -1,
         'SIZE' : (100, 128),
         'SPEED' : (-0.6, 0),
@@ -42,7 +42,19 @@ data = {
         'IMAGE_INDEX_MAX' : 19,
         'IMAGE_INDEX_CD' : 0.08,
         'POSITION_CD' : -1,
-        'SUMMON_CD' : 10,  # 定义多久召唤一次阳光，如果没有召唤物，则为-1
+        'SUMMON_CD' : 10,  # 定义多久召唤一次阳光
+        'SIZE' : (128, 128),
+        'SPEED' : (0, 0),
+        'CAN_LOOT' : False,  # 是否可拾取
+        'PRICE' : 100,  # 向日葵价值金币为100
+    },
+    # 豌豆射手属性表
+    4 :{
+        "PATH" : "pz/pic/plant/peashooter/%d.png",
+        'IMAGE_INDEX_MAX' : 19,
+        'IMAGE_INDEX_CD' : 0.08,
+        'POSITION_CD' : -1,
+        'SUMMON_CD' : 3,  # 定义多久发射一颗子弹
         'SIZE' : (128, 128),
         'SPEED' : (0, 0),
         'CAN_LOOT' : False,  # 是否可拾取
