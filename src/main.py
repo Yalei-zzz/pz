@@ -16,6 +16,8 @@ while True:
         if event.type == pygame.QUIT:  # 如果是退出事件, 则退出程序
             pygame.quit()  # 关闭所有pygame模块
             sys.exit()  # 退出程序
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            game.mouseClickHandler(event.button)
 
     game.update()
     game.draw()

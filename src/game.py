@@ -1,4 +1,4 @@
-
+import pygame
 import image
 from const import *
 import sunflower
@@ -13,8 +13,7 @@ class Game(object):
 
         for i in range(GRID_COUNT[0]):
             for j in range(GRID_COUNT[1]):
-                pos = LEFT_TOP[0] + i*GRID_SIZE[0], LEFT_TOP[1] + j*GRID_SIZE[1]
-                self.plants.append(sunflower.SunFlower(3, pos))
+                self.addSunFlower(i, j)
 
     def draw(self):
         self.back.draw(self.ds)
@@ -33,5 +32,17 @@ class Game(object):
         for summon in self.summons:
             summon.update()
 
-    def addSunFlowe(self, x, y):
+    def addSunFlower(self, x, y):
+        pos = LEFT_TOP[0] + x*GRID_SIZE[0], LEFT_TOP[1] + y*GRID_SIZE[1]
+        self.plants.append(sunflower.SunFlower(3, pos))
+
+    def checkLoot(self, mousePos):
         pass
+
+    def checkAddPlant(self, objID):
+        pass
+
+    def mouseClickHandler(self, btn):
+        mousepos = pygame.mouse.get_pos()
+        self.checkLoot(mousepos)
+        self.checkAddPlant(mousepos)
