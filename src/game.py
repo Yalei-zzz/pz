@@ -2,6 +2,7 @@ import pygame
 import image
 from const import *
 import sunflower
+import data_object
 
 
 class Game(object):
@@ -11,11 +12,19 @@ class Game(object):
         self.plants = []
         self.summons = []
         self.hasPlant = []
+        self.gold = 300
+        self.goldFont = pygame.font.Font(None, 60)  # None表示默认字体
         for i in range(GRID_SIZE[0]):
             col = []
             for j in range(GRID_SIZE[1]):
                 col.append(0)
             self.hasPlant.append(col)
+
+    def renderFont(self):
+        textImage = self.goldFont.render("Gold: "+str(self.gold), True, (0, 0, 0))
+        self.ds.blit(textImage, (13, 23))
+        textImage = self.goldFont.render("Gold: "+str(self.gold), True, (255, 255, 255))
+        self.ds.blit(textImage, (10, 20))
 
     def draw(self):  # 做整个游戏的绘制工作
         self.back.draw(self.ds)
@@ -23,6 +32,8 @@ class Game(object):
             plant.draw(self.ds)
         for summon in self.summons:
             summon.draw(self.ds)
+
+        self.renderFont()
 
     def update(self):  # 做整个游戏的画面更新
         self.back.update()
@@ -39,12 +50,11 @@ class Game(object):
         y = (pos[1]-LEFT_TOP[1]) // GRID_SIZE[1]
         return x,y 
 
-    def addSunFlower(self, x, y):  # 判断该位置是否有植物，如果没有就种下向日葵
-        if self.hasPlant[x][y] == 1:
-            return
+    def addSunFlower(self, x, y):  # 种下向日葵
         self.hasPlant[x][y]=1
         pos = LEFT_TOP[0] + x*GRID_SIZE[0], LEFT_TOP[1] + y*GRID_SIZE[1]
-        self.plants.append(sunflower.SunFlower(3, pos))
+        self.plants.append(sunflower.SunFlower(SUNFLOWER_ID, pos))
+        
 
     # 是否捡起一个object，如果捡起了，就返回True，在此次鼠标事件之后不在执行其他的操作
     def checkLoot(self, mousePos):  
@@ -56,6 +66,7 @@ class Game(object):
             rect = summon.getRect()
             if rect.collidepoint(mousePos):
                 self.summons.remove(summon)
+                self.gold += summon.getPrice()
                 return True
         return False
 
@@ -66,8 +77,15 @@ class Game(object):
             return 
         if y <0 or y >=GRID_COUNT[1]:
             return
+        if self.gold < data_object.data[objID]['PRICE']:  # 检测当前金币是否可以种
+            return
+        if self.hasPlant[x][y] == 1:
+            return
+
+        self.gold -= data_object.data[objID]['PRICE']
         if objID ==SUNFLOWER_ID:  # 如果ID为向日葵的
             self.addSunFlower(x, y)  # 通过getIndexByPos()函数获取方格位置并种下
+            
 
     def mouseClickHandler(self, btn):  #  鼠标事件检测
         mousepos = pygame.mouse.get_pos()  #  获取鼠标点击的位置
