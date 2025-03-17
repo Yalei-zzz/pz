@@ -32,3 +32,6 @@ class Game(object):
                 self.summons.append(summ)
         for summon in self.summons:
             summon.update()
+
+    def addSunFlowe(self, x, y):
+        pass
