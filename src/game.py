@@ -8,6 +8,9 @@ import time
 import random
 import data_object
 
+# 服务器相关
+import asyncclient
+import asyncio
 
 class Game(object):
     def __init__(self, ds):
@@ -32,7 +35,7 @@ class Game(object):
             for j in range(GRID_SIZE[1]):
                 col.append(0)
             self.hasPlant.append(col)
-        self.addZombie(0, 2)
+        self.client = asyncclient.AsyncClient(SERVER_IP, SERVER_PORT)  
 
     def renderFont(self):
         textImage = self.goldFont.render("Gold: "+str(self.gold), True, (0, 0, 0))
@@ -180,5 +183,8 @@ class Game(object):
             return
         if btn==1:  # 如果btn=1，说明左键按下，种下植物
             self.checkAddPlant(mousepos, SUNFLOWER_ID)  # 传入位置和要种的植物ID
+
+            # 如果鼠标左键按下，除了种植之外，向服务器发送一条消息
+            asyncio.run( self.client.c2s( {'type':0, 'pos':self.getIndexByPos(mousepos)} ) )
         elif btn==3:
             self.checkAddPlant(mousepos, PEASHOOTER_ID)
