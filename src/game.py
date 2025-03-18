@@ -36,7 +36,9 @@ class Game(object):
             for j in range(GRID_SIZE[1]):
                 col.append(0)
             self.hasPlant.append(col)
-        self.client = asyncclient.AsyncClient(SERVER_IP, SERVER_PORT)  
+
+        # 定义一个客户端与服务端之间传递消息的对象
+        self.client = asyncclient.AsyncClient(self, SERVER_IP, SERVER_PORT)  
 
     def renderFont(self):
         textImage = self.goldFont.render("Gold: "+str(self.gold), True, (0, 0, 0))
@@ -158,8 +160,8 @@ class Game(object):
         return False
 
 
-    def checkAddPlant(self, mousepos, objID):  # 检测并重植物，需传入位置和植物ID
-        x, y = self.getIndexByPos(mousepos)
+    def checkAddPlant(self, pos, objID):  # 检测并重植物，需传入位置和植物ID
+        x, y = pos
         if x < 0 or x >= GRID_COUNT[0]:
             return 
         if y <0 or y >=GRID_COUNT[1]:
@@ -183,9 +185,9 @@ class Game(object):
         if self.checkLoot(mousepos):
             return
         if btn==1:  # 如果btn=1，说明左键按下，种下植物
-            self.checkAddPlant(mousepos, SUNFLOWER_ID)  # 传入位置和要种的植物ID
+            # self.checkAddPlant(mousepos, SUNFLOWER_ID)  # 传入位置和要种的植物ID
 
             # 如果鼠标左键按下，除了种植之外，向服务器发送一条消息
             asyncio.run( self.client.c2s( {'type':C2S_ADD_SUNFLOWER, 'pos':self.getIndexByPos(mousepos)} ) )
         elif btn==3:
-            self.checkAddPlant(mousepos, PEASHOOTER_ID)
+            self.checkAddPlant(self.getIndexByPos(mousepos), PEASHOOTER_ID)
