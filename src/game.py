@@ -64,11 +64,17 @@ class Game(object):
         for zombie in self.zombies:
             zombie.update()
 
-        if time.time() - self.zombieGenertateTime > ZOMBIEBORN_CD:
+        if time.time() - self.zombieGenertateTime > ZOMBIEBORN_CD:  # 每到一定的时间就去创建一个僵尸
             self.zombieGenertateTime = time.time()
             self.addZomie(14, random.randint(0, GRID_COUNT[1]-1))
 
-        self.checkSummonVSZombie()
+        self.checkSummonVSZombie()  # 每次更新都要检测summon与zombie的碰撞
+
+        for _ in range(3):
+            for summon in self.summons:
+                if summon.getRect().x > GAME_SIZE[0] or summon.getRect().y > GAME_SIZE[1]:
+                    self.summons.remove(summon)
+                    break
 
     def checkSummonVSZombie(self):
         for summon in self.summons:
