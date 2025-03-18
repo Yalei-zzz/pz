@@ -1,5 +1,13 @@
 import pygame
 import sys
+
+# 解决引入上一层文件夹中文件时的ImportError的问题
+import os
+current_path = os.path.abspath(__file__)  # 得到当前文件的绝对路径
+top_path = '\\'.join( current_path.split('\\')[:-2] )  # 分割再拼接得到当前文件的根目录
+sys.path.append(top_path)  # 将根目录加到系统路径里
+
+
 from game import *
 
 from const import *

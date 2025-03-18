@@ -11,6 +11,7 @@ import data_object
 # 服务器相关
 import asyncclient
 import asyncio
+from share.const import *  # 从上一级目录的share文件夹中，引入const.py
 
 class Game(object):
     def __init__(self, ds):
@@ -185,6 +186,6 @@ class Game(object):
             self.checkAddPlant(mousepos, SUNFLOWER_ID)  # 传入位置和要种的植物ID
 
             # 如果鼠标左键按下，除了种植之外，向服务器发送一条消息
-            asyncio.run( self.client.c2s( {'type':0, 'pos':self.getIndexByPos(mousepos)} ) )
+            asyncio.run( self.client.c2s( {'type':C2S_ADD_SUNFLOWER, 'pos':self.getIndexByPos(mousepos)} ) )
         elif btn==3:
             self.checkAddPlant(mousepos, PEASHOOTER_ID)
