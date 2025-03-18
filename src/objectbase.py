@@ -1,6 +1,7 @@
 import image
 import time
 import data_object
+from const import *
 
 class ObjectBase(image.Image):
     def __init__(self, id, pos):
@@ -42,7 +43,7 @@ class ObjectBase(image.Image):
     
     def getData(self):
         return data_object.data[self.id]
-    
+         
     def isCollide(self, other):
         return self.getRect().colliderect( other.getRect() )
 
