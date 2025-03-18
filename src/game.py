@@ -13,6 +13,8 @@ class Game(object):
     def __init__(self, ds):
         self.ds = ds
         self.back = image.Image(PATH_BACK, 0, (0, 0), GAME_SIZE, 0)
+        self.lose = image.Image(PATH_LOSE, 0, (0, 0), GAME_SIZE, 0)
+        self.isGameOver = False
         self.plants = []
         self.zombies = []
         self.summons = []
@@ -30,6 +32,7 @@ class Game(object):
             for j in range(GRID_SIZE[1]):
                 col.append(0)
             self.hasPlant.append(col)
+        self.addZombie(0, 2)
 
     def renderFont(self):
         textImage = self.goldFont.render("Gold: "+str(self.gold), True, (0, 0, 0))
@@ -42,15 +45,18 @@ class Game(object):
         self.ds.blit(textImage, (10, 60))
 
     def draw(self):  # 做整个游戏的绘制工作
+        
         self.back.draw(self.ds)
-        for plant in self.plants:
-            plant.draw(self.ds)
-        for summon in self.summons:
-            summon.draw(self.ds)
-        for zombie in self.zombies:
-            zombie.draw(self.ds)
-
+        if self.isGameOver ==True:
+            self.lose.draw(self.ds)
         self.renderFont()
+        if self.isGameOver == False:
+            for plant in self.plants:
+                plant.draw(self.ds)
+            for summon in self.summons:
+                summon.draw(self.ds)
+            for zombie in self.zombies:
+                zombie.draw(self.ds)
 
     def update(self):  # 做整个游戏的画面更新
         self.back.update()
@@ -71,13 +77,17 @@ class Game(object):
         self.checkSummonVSZombie()  # 每次更新都要检测summon与zombie的碰撞
         self.checkZombieVSPlant()
 
-        for _ in range(3):
+        for _ in range(3):  # 删除已经不在画面的object，方式内存泄露
             for summon in self.summons:
                 if summon.getRect().x > GAME_SIZE[0] or summon.getRect().y > GAME_SIZE[1]:
                     self.summons.remove(summon)
                     break
 
-    def checkSummonVSZombie(self):
+        for zombie in self.zombies:
+            if zombie.getRect().x < 0:
+                self.isGameOver = True
+
+    def checkSummonVSZombie(self):  # 豌豆打僵尸
         for summon in self.summons:
             for zombie in self.zombies:
                 if summon.isCollide(zombie):
@@ -89,7 +99,7 @@ class Game(object):
                         self.score += 1
                     return
 
-    def checkZombieVSPlant(self):
+    def checkZombieVSPlant(self):  # 僵尸吃植物
         for zombie in self.zombies:
             for plant in self.plants:
                 if zombie.isCollide( plant):
@@ -163,6 +173,8 @@ class Game(object):
             
 
     def mouseClickHandler(self, btn):  #  鼠标事件检测
+        if self.isGameOver == True:
+            return
         mousepos = pygame.mouse.get_pos()  #  获取鼠标点击的位置
         if self.checkLoot(mousepos):
             return
