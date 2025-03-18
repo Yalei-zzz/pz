@@ -160,16 +160,8 @@ class Game(object):
         return False
 
 
-    def checkAddPlant(self, pos, objID):  # 检测并重植物，需传入位置和植物ID
+    def addPlant(self, pos, objID):  # 检测并重植物，需传入位置和植物ID
         x, y = pos
-        if x < 0 or x >= GRID_COUNT[0]:
-            return 
-        if y <0 or y >=GRID_COUNT[1]:
-            return
-        if self.gold < data_object.data[objID]['PRICE']:  # 检测当前金币是否可以种
-            return
-        if self.hasPlant[x][y] == 1:
-            return
 
         self.gold -= data_object.data[objID]['PRICE']
         if objID ==SUNFLOWER_ID:  # 如果ID为向日葵的
@@ -184,10 +176,8 @@ class Game(object):
         mousepos = pygame.mouse.get_pos()  #  获取鼠标点击的位置
         if self.checkLoot(mousepos):
             return
-        if btn==1:  # 如果btn=1，说明左键按下，种下植物
-            # self.checkAddPlant(mousepos, SUNFLOWER_ID)  # 传入位置和要种的植物ID
-
+        if btn==1:  
             # 如果鼠标左键按下，除了种植之外，向服务器发送一条消息
             asyncio.run( self.client.c2s( {'type':C2S_ADD_SUNFLOWER, 'pos':self.getIndexByPos(mousepos)} ) )
         elif btn==3:
-            self.checkAddPlant(self.getIndexByPos(mousepos), PEASHOOTER_ID)
+            self.addPlant(self.getIndexByPos(mousepos), PEASHOOTER_ID)

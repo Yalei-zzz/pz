@@ -30,5 +30,10 @@ class AsyncClient(object):
         msg = json.loads(message.decode())
         print( msg )
         if msg['type'] == S2C_ADD_SUNFLOWER:
-            self.game.checkAddPlant(msg['pos'], SUNFLOWER_ID)
+            """在客户端向服务端发送消息，服务端收到消息之后，
+            在服务端的game.py的checkAddPlant中检查,
+            如果检查都将code置为S2C_CODE_SUCCED,
+            就可以在客户端调用addPlant种植"""
+            if msg['code'] == S2C_CODE_SUCCED:
+                self.game.addPlant(msg['pos'], SUNFLOWER_ID)
 

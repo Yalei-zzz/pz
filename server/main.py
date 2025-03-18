@@ -13,31 +13,30 @@ top_path = '\\'.join( current_path.split('\\')[:-2] )  # 分割再拼接得到�
 sys.path.append(top_path)  # 将根目录加到系统路径里
 
 from share.const import *
+import game
+g = game.Game()
 
-async def handle_client(reader, weiter):  # 服务器启动之后，客户端链接服务器之后会执行这个函数
+async def handle_client(reader, writer):  # 服务器启动之后，客户端链接服务器之后会执行这个函数
     data = await reader.read(MAX_BYTES)  # 接收客户端传来的消息
-    
-    # 打印客户端传来的消息
-    print(data)  
-
+ 
     # 在客户端的asyncClient中使用了encode进行了编码，所以在这要用decode进行解码
     # 在客户端的asyncClient中使用了json.dumps将信息转换为字符流，在这用json.loads还原
     msg = json.loads( data.decode() )  
 
+    # 打印客户端传来的消息
+    print(msg) 
+
     # 定义一个下行消息
     s2cmsg= {}
 
-    # 如果上行消息的type是C2S_ADD_SUNFLOWER，就让下行消息的tpye也是C2S_ADD_SUNFLOWER，pos与上行消息的一样
+    # 如果上行消息的type是C2S_ADD_SUNFLOWER，就让下行消息s2cmsg等于服务端的checkAddPlant返回的mgs
     if msg['type'] == C2S_ADD_SUNFLOWER:  
-        s2cmsg={
-            'type' : S2C_ADD_SUNFLOWER,
-            'pos' : msg['pos']
-        }
+        s2cmsg = g.checkAddPlant( msg['pos'] )
 
     # 然后执行的操作与客户端的asyncclient.py中的上行消息一样
     # 先用json的dumps函数将数据s2cmsg打包成字符流，再进行编码
-    weiter.write(json.dumps(s2cmsg).encode()) 
-    await weiter.drain()
+    writer.write(json.dumps(s2cmsg).encode()) 
+    await writer.drain()
 
 
 async def main():  # async 表示这个函数要异步等待
