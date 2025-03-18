@@ -66,9 +66,10 @@ class Game(object):
 
         if time.time() - self.zombieGenertateTime > ZOMBIEBORN_CD:  # 每到一定的时间就去创建一个僵尸
             self.zombieGenertateTime = time.time()
-            self.addZomie(14, random.randint(0, GRID_COUNT[1]-1))
+            self.addZombie(14, random.randint(0, GRID_COUNT[1]-1))
 
         self.checkSummonVSZombie()  # 每次更新都要检测summon与zombie的碰撞
+        self.checkZombieVSPlant()
 
         for _ in range(3):
             for summon in self.summons:
@@ -87,6 +88,17 @@ class Game(object):
                         self.zombies.remove(zombie)
                         self.score += 1
                     return
+
+    def checkZombieVSPlant(self):
+        for zombie in self.zombies:
+            for plant in self.plants:
+                if zombie.isCollide( plant):
+                    self.fight(zombie, plant)
+                    if zombie.hp < 0:
+                        self.zombies.remove(zombie)
+                    if plant.hp < 0:
+                        self.plants.remove(plant)
+                    break
 
     def fight(self, a, b):
         while True:
@@ -112,7 +124,7 @@ class Game(object):
         pos = LEFT_TOP[0] + x*GRID_SIZE[0], LEFT_TOP[1] + y*GRID_SIZE[1]
         self.plants.append(peashooter.PeaShooter(PEASHOOTER_ID, pos))
 
-    def addZomie(self, x, y):
+    def addZombie(self, x, y):
         pos = LEFT_TOP[0] + x*GRID_SIZE[0], LEFT_TOP[1] + y*GRID_SIZE[1]
         self.zombies.append(zombiebase.ZombieBase(ZOMBIE_ID, pos))
         
