@@ -5,6 +5,8 @@ import data_object
 class ObjectBase(image.Image):
     def __init__(self, id, pos):
         self.id = id
+        self.hp = self.getData()['HP']  # 因为这个变量会变化，不能直接用表中读取
+        self.attack = self.getData()['ATT']
         self.preIndexTime = 0
         self.prePositnIime = 0
         self.preSummonTime = 0
@@ -37,6 +39,12 @@ class ObjectBase(image.Image):
     
     def getPrice(self):
         return self.getID()['PRICE']
+    
+    def getData(self):
+        return data_object.data[self.id]
+    
+    def isCollide(self, other):
+        return self.getRect().colliderect( other.getRect() )
 
     def checkImageIndex(self):   # 判断延时，时间一到就返回True，可以切换图片
 
