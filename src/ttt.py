@@ -1,6 +1,4 @@
 
-import sunlight
 
-summ = None
-if summ:
-    print("hello")
+x = 1
+print(f"{x}")
